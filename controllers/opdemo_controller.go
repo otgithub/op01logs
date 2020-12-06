@@ -67,9 +67,9 @@ func (r *OpDemoReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 	reconcileLog.Info("OP: Reconcile: Number of pods = " + strconv.Itoa(len(podList.Items)))
-	// for _, podInfo := range (*podList).Items {
-	//	reconcileLog.Info("OP: Reconcile: podInfo.Name = " + podInfo.Name)
-	//}
+	for _, podInfo := range (*podList).Items {
+		reconcileLog.Info("OP: Reconcile: pod name = " + podInfo.Name)
+	}
 
 	// end custom logic
 
