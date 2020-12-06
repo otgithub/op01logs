@@ -1,0 +1,7 @@
+apiVersion: opdemo.opdemo.org/v1
+kind: OpDemo
+metadata:
+  name: opdemo-sample
+spec:
+  # Add fields here
+  foo: bar

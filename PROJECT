@@ -1,0 +1,11 @@
+domain: opdemo.org
+layout: go.kubebuilder.io/v2
+projectName: op01
+repo: github.com/opdemo/op01
+resources:
+- group: opdemo
+  kind: OpDemo
+  version: v1
+version: 3-alpha
+plugins:
+  go.sdk.operatorframework.io/v2-alpha: {}

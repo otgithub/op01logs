@@ -1,0 +1,24 @@
+# permissions for end users to edit opdemoes.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opdemo-editor-role
+rules:
+- apiGroups:
+  - opdemo.opdemo.org
+  resources:
+  - opdemoes
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - opdemo.opdemo.org
+  resources:
+  - opdemoes/status
+  verbs:
+  - get
