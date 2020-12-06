@@ -4,4 +4,4 @@ metadata:
   name: opdemo-sample
 spec:
   # Add fields here
-  foo: bar
+  foo: bar2

@@ -38,10 +38,24 @@ type OpDemoReconciler struct {
 // +kubebuilder:rbac:groups=opdemo.opdemo.org,resources=opdemoes/status,verbs=get;update;patch
 
 func (r *OpDemoReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
-	_ = context.Background()
-	_ = r.Log.WithValues("opdemo", req.NamespacedName)
+	//_ = context.Background()
+	ctx := context.Background()
+	//	_ = r.Log.WithValues("opdemo", req.NamespacedName)
+	reconcileLog := r.Log.WithValues("opdemo", req.NamespacedName)
 
 	// your logic here
+	reconcileLog.Info("OP: Reconcile: method called")
+	reconcileLog.Info("OP: Reconcile: req.Name=" + req.Name)
+	reconcileLog.Info("OP: Reconcile: req.Namespace=" + req.Namespace)
+	// get instance of the OpDemo
+	opdemo := &opdemov1.OpDemo{}
+	err := r.Get(ctx, req.NamespacedName, opdemo)
+	if err != nil {
+		reconcileLog.Info("OP: Reconcile: error getting OpDemo instance")
+		return ctrl.Result{}, err
+	}
+	reconcileLog.Info("OP: Reconcile: spec Foo =" + opdemo.Spec.Foo)
+	// end custom logic
 
 	return ctrl.Result{}, nil
 }

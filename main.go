@@ -47,6 +47,7 @@ func init() {
 func main() {
 	var metricsAddr string
 	var enableLeaderElection bool
+
 	flag.StringVar(&metricsAddr, "metrics-addr", ":8080", "The address the metric endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "enable-leader-election", false,
 		"Enable leader election for controller manager. "+
@@ -54,6 +55,8 @@ func main() {
 	flag.Parse()
 
 	ctrl.SetLogger(zap.New(zap.UseDevMode(true)))
+
+	setupLog.Info("OP: main() is called 1")
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
@@ -67,6 +70,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	setupLog.Info("OP: main() is called 2")
+
 	if err = (&controllers.OpDemoReconciler{
 		Client: mgr.GetClient(),
 		Log:    ctrl.Log.WithName("controllers").WithName("OpDemo"),
@@ -77,9 +82,13 @@ func main() {
 	}
 	// +kubebuilder:scaffold:builder
 
+	setupLog.Info("OP: main() is called 3")
+
 	setupLog.Info("starting manager")
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
 		setupLog.Error(err, "problem running manager")
 		os.Exit(1)
 	}
+
+	setupLog.Info("OP: main() is called 4")
 }
