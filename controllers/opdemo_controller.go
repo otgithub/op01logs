@@ -18,8 +18,10 @@ package controllers
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-logr/logr"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -45,8 +47,8 @@ func (r *OpDemoReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 	// your logic here
 	reconcileLog.Info("OP: Reconcile: method called")
-	reconcileLog.Info("OP: Reconcile: req.Name=" + req.Name)
-	reconcileLog.Info("OP: Reconcile: req.Namespace=" + req.Namespace)
+	reconcileLog.Info("OP: Reconcile: req.Name= " + req.Name)
+	reconcileLog.Info("OP: Reconcile: req.Namespace= " + req.Namespace)
 	// get instance of the OpDemo
 	opdemo := &opdemov1.OpDemo{}
 	err := r.Get(ctx, req.NamespacedName, opdemo)
@@ -54,7 +56,21 @@ func (r *OpDemoReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		reconcileLog.Info("OP: Reconcile: error getting OpDemo instance")
 		return ctrl.Result{}, err
 	}
-	reconcileLog.Info("OP: Reconcile: spec Foo =" + opdemo.Spec.Foo)
+	reconcileLog.Info("OP: Reconcile: spec Foo = " + opdemo.Spec.Foo)
+
+	podList := &corev1.PodList{}
+	listOpts := []client.ListOption{
+		client.InNamespace(opdemo.Namespace),
+	}
+	if err = r.List(ctx, podList, listOpts...); err != nil {
+		reconcileLog.Info("OP: Reconcile: error listing pods")
+		return ctrl.Result{}, err
+	}
+	reconcileLog.Info("OP: Reconcile: Number of pods = " + strconv.Itoa(len(podList.Items)))
+	// for _, podInfo := range (*podList).Items {
+	//	reconcileLog.Info("OP: Reconcile: podInfo.Name = " + podInfo.Name)
+	//}
+
 	// end custom logic
 
 	return ctrl.Result{}, nil
